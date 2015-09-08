@@ -1,0 +1,5 @@
+suites:
+    main:
+        namespace: MkmScraper
+        psr4_prefix: MkmScraper
+        src_path: app
