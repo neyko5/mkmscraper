@@ -36,7 +36,7 @@ class ScrapeHtml extends Command
             $trend=$crawler->filter('.sectioncontent .availTable .row_2  .cell_2_1')->first()->text();
             $trendnumber=explode(" ",$trend);
             $trendfinal=str_replace(",",".",$trendnumber[0]);
-            $cardPrice=\MkmScraper\CardPrice::create(array("id_card"=>$card->id,"low"=>$low,"trend"=>$trendfinal,"sellers"=>$available));
+            $cardPrice=\MkmScraper\CardPrice::create(array("id_card"=>$card->id,"low"=>$lowfinal,"trend"=>$trendfinal,"sellers"=>$available));
         }
     }
 }

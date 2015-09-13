@@ -18,5 +18,6 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('scrapeprices')->hourly();
         $schedule->command('checkforitems')->daily();
+        $schedule->command('scrapehtml')->daily();
     }
 }
