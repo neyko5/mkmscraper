@@ -16,7 +16,7 @@ class Kernel extends ConsoleKernel
 
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('scrapeprices')->hourly();
+        $schedule->command('scrapeprices')->daily();
         $schedule->command('checkforitems')->daily();
         $schedule->command('scrapehtml')->daily();
     }
