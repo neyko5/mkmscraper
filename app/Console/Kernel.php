@@ -9,11 +9,13 @@ class Kernel extends ConsoleKernel
 {
     protected $commands = [
         \MkmScraper\Console\Commands\ScrapePrices::class,
+        \MkmScraper\Console\Commands\CheckForItems::class,
     ];
 
 
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('scrapeprices')->hourly();
+        $schedule->command('checkforitems')->daily();
     }
 }
