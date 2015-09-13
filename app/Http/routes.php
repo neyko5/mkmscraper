@@ -12,23 +12,19 @@
 */
 
 Route::get("scrape",function(){
-    foreach(\MkmScraper\Set::all() as $set){
-        $articles=queryMKMAPI("articles/265721");
-        dd(sizeof($articles->article));
-        $result=queryMKMAPI("expansion/1/".rawurlencode($set->name));
-        foreach($result->card as $key=>$card){
 
-            $record=\MkmScraper\Card::find($card->idProduct);
-            if(!$record){
-                \MkmScraper\Card::create(array("id"=>$card->idProduct,"name"=>$card->name[0]->productName,"id_set"=>$set->id,"rarity"=>$card->rarity));
-            }
-            $product=queryMKMAPI("product/".$card->idProduct);
+});
 
-
-            $articles=queryMKMAPI("articles/".$card->idProduct);
-            $price=$product->product->priceGuide;
-
-            \MkmScraper\CardPrice::create(array("id_card"=>$card->idProduct,"sell"=>$price->SELL,"low"=>$price->LOW,"lowex"=>$price->LOWEX,"lowfoil"=>$price->LOWFOIL,"avg"=>$price->AVG,"trend"=>$price->TREND));
-        }
+Route::get("htmlscrape",function(){
+    $client = new \Goutte\Client();
+    foreach(\MkmScraper\Card::all() as $card){
+        $crawler = $client->request('GET','https://www.magiccardmarket.eu/Products/Singles/'.rawurlencode($card->set).'/'.rawurlencode($card->name));
+        $available=$crawler->filter('.sectioncontent .availTable .row_0  .cell_0_1')->first()->text();
+        $low=$crawler->filter('.sectioncontent .availTable .row_1  .cell_1_1 span')->first()->text();
+        $lowfinal=str_replace(",",".",$low);
+        $trend=$crawler->filter('.sectioncontent .availTable .row_2  .cell_2_1')->first()->text();
+        $trendnumber=explode(" ",$trend);
+        $trendfinal=str_replace(",",".",$trendnumber[0]);
+        $cardPrice=\MkmScraper\CardPrice::create(array("id_card"=>$card->id,"low"=>$low,"trend"=>$trendfinal,"sellers"=>$available));
     }
 });

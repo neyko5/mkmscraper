@@ -61,7 +61,6 @@
         $content            = curl_exec($curlHandle);
         $info               = curl_getinfo($curlHandle);
         curl_close($curlHandle);
-
         $decoded            = simplexml_load_string($content);
         return $decoded;
     }
