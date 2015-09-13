@@ -29,15 +29,23 @@ class ScrapePrices extends Command
     {
         foreach(\MkmScraper\Set::all() as $set){
             $result=queryMKMAPI("expansion/1/".rawurlencode($set->name));
-            foreach($result->card as $card){
-                $record=\MkmScraper\Card::find($card->idProduct);
-                if(!$record){
-                    \MkmScraper\Card::create(array("id"=>$card->idProduct,"name"=>$card->name[0]->productName,"id_set"=>$set->id,"rarity"=>$card->rarity));
+            if(is_object($result)){
+                foreach($result->card as $card){
+                    $record=\MkmScraper\Card::find($card->idProduct);
+                    if(!$record){
+                        \MkmScraper\Card::create(array("id"=>$card->idProduct,"name"=>$card->name[0]->productName,"id_set"=>$set->id,"rarity"=>$card->rarity));
+                    }
+                    $product=queryMKMAPI("product/".$card->idProduct);
+                    $articles=queryMKMAPI("articles/".$card->idProduct);
+                    $price=$product->product->priceGuide;
+                    $cardPrice=\MkmScraper\CardPrice::create(array("id_card"=>$card->idProduct,"sell"=>$price->SELL,"low"=>$price->LOW,"lowex"=>$price->LOWEX,"lowfoil"=>$price->LOWFOIL,"avg"=>$price->AVG,"trend"=>$price->TREND,"sellers"=>sizeof($articles->article)));
+
                 }
-                $product=queryMKMAPI("product/".$card->idProduct);
-                $price=$product->product->priceGuide;
-                \MkmScraper\CardPrice::create(array("id_card"=>$card->idProduct,"sell"=>$price->SELL,"low"=>$price->LOW,"lowex"=>$price->LOWEX,"lowfoil"=>$price->LOWFOIL,"avg"=>$price->AVG,"trend"=>$price->TREND));
             }
+            else{
+                dd($result);
+            }
+
         }
     }
 }
