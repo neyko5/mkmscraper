@@ -1,11 +1,11 @@
 <?php
     function queryMKMAPI($url) {
         $method             = "GET";
-        $url                = env("mkm_url").$url;
-        $appToken           = env("mkm_token");
-        $appSecret          = env("mkm_token_secret");
-        $accessToken        = env("mkm_access_token");
-        $accessSecret       = env("mkm_access_token_secret");
+        $url                = env("MKM_URL").$url;
+        $appToken           = env("MKM_TOKEN");
+        $appSecret          = env("MKM_TOKEN_SECRET");
+        $accessToken        = env("MKM_ACCESS_TOKEN");
+        $accessSecret       = env("MKM_ACCESS_TOKEN_SECRET");
         $nonce              = uniqid();
         $timestamp          = time();
         $signatureMethod    = "HMAC-SHA1";
