@@ -12,6 +12,4 @@ class Card extends Model
     public function set(){
         return $this->belongsTo("\MkmScraper\Set","id_set");
     }
-
-
 }
