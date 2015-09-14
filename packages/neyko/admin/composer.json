@@ -1,0 +1,24 @@
+{
+    "name": "neyko/admin",
+    "description": "",
+    "version":"0.1",
+    "authors": [
+        {
+            "name": "Jernej Lipovec",
+            "email": "neykomir@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "illuminate/support": "5.*"
+    },
+    "autoload": {
+        "classmap": [
+            
+        ],
+        "psr-4": {
+            "Neyko\\Admin\\": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}

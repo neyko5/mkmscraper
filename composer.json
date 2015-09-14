@@ -6,21 +6,23 @@
     "type": "project",
     "require": {
         "php": ">=5.5.9",
-        "laravel/framework": "5.1.*"
+        "laravel/framework": "5.1.*",
+        "laravelcollective/html": "~5.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
         "mockery/mockery": "0.9.*",
         "phpunit/phpunit": "~4.0",
-        "phpspec/phpspec": "~2.1",
-        "fabpot/goutte":"*"
+        "phpspec/phpspec": "~2.1"
+
     },
     "autoload": {
         "classmap": [
             "database"
         ],
         "psr-4": {
-            "MkmScraper\\": "app/"
+            "MkmScraper\\": "app/",
+            "Neyko\\Admin\\":"packages/neyko/admin/src/"
         },
         "files": [
           "app/Support/helpers.php"
