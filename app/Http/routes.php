@@ -35,7 +35,7 @@ Route::get("scrape",function(){
 });
 
 Route::get("htmlscrape",function(){
-
+    $client = new \Goutte\Client();
     foreach(\MkmScraper\Card::all() as $card){
         $crawler = $client->request('GET','https://www.magiccardmarket.eu/Products/Singles/'.rawurlencode($card->set).'/'.rawurlencode($card->name));
         $available=$crawler->filter('.sectioncontent .availTable .row_0  .cell_0_1')->first()->text();
