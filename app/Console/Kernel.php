@@ -10,6 +10,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         \MkmScraper\Console\Commands\ScrapePrices::class,
         \MkmScraper\Console\Commands\CheckForItems::class,
+        \MkmScraper\Console\Commands\ScrapeHtml::class,
     ];
 
 
