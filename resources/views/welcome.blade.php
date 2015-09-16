@@ -1,45 +1,28 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Laravel</title>
+@extends('layouts.main')
 
-        <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
-
-        <style>
-            html, body {
-                height: 100%;
-            }
-
-            body {
-                margin: 0;
-                padding: 0;
-                width: 100%;
-                display: table;
-                font-weight: 100;
-                font-family: 'Lato';
-            }
-
-            .container {
-                text-align: center;
-                display: table-cell;
-                vertical-align: middle;
-            }
-
-            .content {
-                text-align: center;
-                display: inline-block;
-            }
-
-            .title {
-                font-size: 96px;
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <div class="content">
-                <div class="title">Laravel 5</div>
-            </div>
-        </div>
-    </body>
-</html>
+@section('content')
+    {!! \Form::open(array("action"=>"ScrapeController@processWizards","method"=>"POST")) !!}}
+    <div class="form-group">
+        <label>Urls</label>
+        @for($i=1;$i<17;$i++)
+        <input type="text" name="url" class="form-control" placeholder="URL {{$i}}">
+        @endfor
+    </div>
+    <div class="form-group">
+        <label for="date">Name of the event</label>
+        <input type="text" name="name" class="form-control" placeholder="Name of the event">
+    </div>
+    <div class="form-group">
+        <label for="date">Date</label>
+        <input type="text" name="date" class="form-control" placeholder="Date of the event">
+    </div>
+    <div class="form-group">
+        <label for="date">Rank</label>
+        <select name="rank">
+            <option value="1">1 - Pro Tours</option>
+            <option value="2">2 - Grand Prix</option>
+            <option value="3">3 - SCG Open,RPTQ</option>
+            <option value="4">4 - PPTQ,IQ,GPT</option>
+        </select>
+    </div>
+@endsection

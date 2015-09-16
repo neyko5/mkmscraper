@@ -47,3 +47,9 @@ Route::get("htmlscrape",function(){
         $cardPrice=\MkmScraper\CardPrice::create(array("id_card"=>$card->id,"low"=>$low,"trend"=>$trendfinal,"sellers"=>$available));
     }
 });
+
+Route::get("decklists/wizards",function(){
+    return view("scrape/wizards");
+});
+
+Route::post("decklists/wizards","ScrapeController@processWizards");
