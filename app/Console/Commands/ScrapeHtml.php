@@ -30,6 +30,7 @@ class ScrapeHtml extends Command
         $client = new \Goutte\Client();
         foreach(\MkmScraper\Card::all() as $card){
             $crawler = $client->request('GET','https://www.magiccardmarket.eu/Products/Singles/'.rawurlencode($card->set).'/'.rawurlencode($card->name));
+            \Log::info('https://www.magiccardmarket.eu/Products/Singles/'.rawurlencode($card->set).'/'.rawurlencode($card->name));
             $available=0;
             $lowfinal=0;
             $trendfinal=0;
