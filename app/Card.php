@@ -18,7 +18,7 @@ class Card extends Model
     }
 
     public function todaysPrice(){
-        $this->prices()->where("updated_at","<",date("Y-m-d")." 23:59:59")->where("updated_at",">",date("Y-m-d")." 00:00:00");
+        return $this->prices()->where("updated_at","<",date("Y-m-d")." 23:59:59")->where("updated_at",">",date("Y-m-d")." 00:00:00");
     }
 
 
