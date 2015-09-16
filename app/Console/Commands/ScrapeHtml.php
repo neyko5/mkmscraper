@@ -47,7 +47,9 @@ class ScrapeHtml extends Command
                     $trendfinal = str_replace(",", ".", $trendnumber[0]);
                 }
             }
-            catch{}
+            catch (Exception $e){
+                print $e->getMessage();
+            }
 
             $cardPrice=\MkmScraper\CardPrice::create(array("id_card"=>$card->id,"low"=>$lowfinal,"trend"=>$trendfinal,"sellers"=>$available));
         }
