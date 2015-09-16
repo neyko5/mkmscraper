@@ -33,18 +33,21 @@ class ScrapeHtml extends Command
             $available=0;
             $lowfinal=0;
             $trendfinal=0;
-            if($av=$crawler->filter('.sectioncontent .availTable .row_0  .cell_0_1')->first()){
-                $available=$av->text();
+            try {
+                if ($av = $crawler->filter('.sectioncontent .availTable .row_0  .cell_0_1')->first()) {
+                    $available = $av->text();
+                }
+                if ($lo = $crawler->filter('.sectioncontent .availTable .row_1  .cell_1_1 span')->first()) {
+                    $low = $lo->text();
+                    $lowfinal = str_replace(",", ".", $low);
+                }
+                if ($tr = $crawler->filter('.sectioncontent .availTable .row_2  .cell_2_1')->first()) {
+                    $trend = $tr->text();
+                    $trendnumber = explode(" ", $trend);
+                    $trendfinal = str_replace(",", ".", $trendnumber[0]);
+                }
             }
-            if($lo=$crawler->filter('.sectioncontent .availTable .row_1  .cell_1_1 span')->first()){
-                $low=$lo->text();
-                $lowfinal=str_replace(",",".",$low);
-            }
-            if($tr=$crawler->filter('.sectioncontent .availTable .row_2  .cell_2_1')->first()){
-                $trend=$tr->text();
-                $trendnumber=explode(" ",$trend);
-                $trendfinal=str_replace(",",".",$trendnumber[0]);
-            }
+            catch{}
 
             $cardPrice=\MkmScraper\CardPrice::create(array("id_card"=>$card->id,"low"=>$lowfinal,"trend"=>$trendfinal,"sellers"=>$available));
         }
