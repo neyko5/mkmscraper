@@ -16,9 +16,9 @@ class Kernel extends ConsoleKernel
 
     protected function schedule(Schedule $schedule)
     {
-        //$schedule->command('checkforitems')->daily();
-        $schedule->command('scrapeprices')->daily();
-
+        $schedule->command('checkforitems')->daily();
+        //$schedule->command('scrapeprices')->daily();
+        $schedule->command("scrapehtml")->everyThirtyMinutes();
 
     }
 }
