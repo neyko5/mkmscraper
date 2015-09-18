@@ -21,6 +21,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('checkforitems')->daily();
         $schedule->command("scrapehtml")->everyThirtyMinutes();
         $schedule->command("saveboosteraverage")->dailyAt('16:00');
+        $schedule->command("scrapegraph")->everyTenMinutes();
 
     }
 }
