@@ -30,7 +30,6 @@ class ScrapeGraph extends Command
         $client = new \Goutte\Client();
         foreach(\MkmScraper\Card::all() as $card){
             if(\MkmScraper\GraphPrice::where("id_card",$card->id)->where("date",">",date("Y-m-d",strtotime("-14 days")))->count()<1){
-                $time=microtime();
                 $crawler = $client->request('GET','https://www.magiccardmarket.eu/Products/Singles/'.rawurlencode($card->set).'/'.rawurlencode($card->name));
                 $available=$crawler->filter('#ProductInformation script')->first()->text();
                 $split=explode("chartData =",$available);
@@ -41,7 +40,6 @@ class ScrapeGraph extends Command
                         \MkmScraper\GraphPrice::create(array("id_card"=>$card->id,"date"=>date_format(date_create_from_format('d.m.y', $label), 'Y-m-d'),"sell"=>$object->datasets[0]->data[$key]));
                     }
                 }
-                print $card->name. " - ".(microtime()-$time)." ms </br>";
             }
 
         }
