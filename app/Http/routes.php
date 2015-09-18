@@ -13,20 +13,14 @@
 
 Route::get("scrape",function(){
     $client = new \Goutte\Client();
-    $crawler = $client->request('GET','http://sales.starcitygames.com/deckdatabase/deckshow.php?event_ID=45&t[T3]=1&start_date=2015-09-05&end_date=2015-09-06&order_1=finish&limit=100&action=Show+Decks&city=Cincinnati');
-    $link=$crawler->filter("td a")->each(function($node) use ($client){
-        if(strpos($node->attr('href'),"http://sales.starcitygames.com//deckdatabase/displaydeck.php?DeckID=")!==false){
-            $dlcrawler=$client->request('GET',$node->attr('href'));
-            $place=explode(" ",$dlcrawler->filter(".deck_played_placed")->first()->text());
-            $numberplace=intval($place[0]);
-            print "<i>".$numberplace."</i>";
-            $link=$dlcrawler->filter(".deck_card_wrapper li")->each(function($node) use($numberplace){
-                $split=explode(" ",$node->text(), 2);
-                $card=\MkmScraper\Card::where("name",$split[1])->first();
-                if($card){
-                    \MkmScraper\DecklistAppearance::create(array("id_card"=>$card->id,"number"=>$split[0],"rank"=>"3","place"=>$numberplace,"date"=>"2015-01-02"));
-                    print $card->id." - ".$node->text()."<br/>";
-                }
+    $crawler = $client->request('GET','http://mtgtop8.com/event?e=10488');
+    $link=$crawler->filter("td>div>div a")->each(function($node) use ($client){
+
+        if(strpos($node->attr('href'),"event")!==false){
+            print "http://mtgtop8.com/".$node->attr('href') ." - ".$node->text()."<br>";
+            $dlcrawler=$client->request('GET',"http://mtgtop8.com/".$node->attr('href'));
+            $link=$dlcrawler->filter("table table td .chosen_tr,table table td .hover_tr")->each(function($node){
+                print "<b>".$node->text()."</b><br>";
             });
         }
     });
@@ -37,19 +31,40 @@ Route::get("scrape",function(){
 Route::get("htmlscrape",function(){
     $client = new \Goutte\Client();
     foreach(\MkmScraper\Card::all() as $card){
+        $time=microtime();
         $crawler = $client->request('GET','https://www.magiccardmarket.eu/Products/Singles/'.rawurlencode($card->set).'/'.rawurlencode($card->name));
-        $available=$crawler->filter('.sectioncontent .availTable .row_0  .cell_0_1')->first()->text();
-        $low=$crawler->filter('.sectioncontent .availTable .row_1  .cell_1_1 span')->first()->text();
-        $lowfinal=str_replace(",",".",$low);
-        $trend=$crawler->filter('.sectioncontent .availTable .row_2  .cell_2_1')->first()->text();
-        $trendnumber=explode(" ",$trend);
-        $trendfinal=str_replace(",",".",$trendnumber[0]);
-        $cardPrice=\MkmScraper\CardPrice::create(array("id_card"=>$card->id,"low"=>$lowfinal,"trend"=>$trendfinal,"sellers"=>$available));
+        $available=$crawler->filter('#ProductInformation script')->first()->text();
+        $split=explode("chartData =",$available);
+        $split2=explode(";var ctx",$split[1]);
+        $object=json_decode($split2[0]);
+        foreach($object->labels as $key=>$label){
+            if(\MkmScraper\GraphPrice::where("id_card",$card->id)->where("date",date_format(date_create_from_format('d.m.y', $label), 'Y-m-d'))->count()<1){
+                \MkmScraper\GraphPrice::create(array("id_card"=>$card->id,"date"=>date_format(date_create_from_format('d.m.y', $label), 'Y-m-d'),"sell"=>$object->datasets[0]->data[$key]));
+            }
+        }
+        print $card->name. " - ".(microtime()-$time)." ms </br>";
     }
+
 });
 
 Route::get("decklists/wizards",function(){
-    return view("scrape/wizards");
+    return view("decklists/wizards");
 });
 
 Route::post("decklists/wizards","ScrapeController@processWizards");
+
+Route::get("decklists/scg",function(){
+    return view("decklists/scg");
+});
+
+Route::post("decklists/scg","ScrapeController@processScg");
+
+Route::get("decklists/top8",function(){
+    return view("decklists/top8");
+});
+
+Route::post("decklists/top8","ScrapeController@processTop8");
+
+Route::get("/","DisplayController@showSets");
+Route::get("/set/{id}","DisplayController@showSet");
+Route::get("/card/{id}","DisplayController@showCard");

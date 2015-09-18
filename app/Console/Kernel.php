@@ -11,14 +11,15 @@ class Kernel extends ConsoleKernel
         \MkmScraper\Console\Commands\ScrapePrices::class,
         \MkmScraper\Console\Commands\CheckForItems::class,
         \MkmScraper\Console\Commands\ScrapeHtml::class,
+        \MkmScraper\Console\Commands\SaveBoosterAverage::class,
     ];
 
 
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('checkforitems')->daily();
-        //$schedule->command('scrapeprices')->daily();
         $schedule->command("scrapehtml")->everyThirtyMinutes();
+        $schedule->command("saveboosteraverage")->dailyAt('16:00');
 
     }
 }

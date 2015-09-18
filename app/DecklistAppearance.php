@@ -6,6 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class DecklistAppearance extends Model
 {
-    protected $fillable=array("id_card","place","rank","number","date");
+    protected $fillable=array("id_card","place","rank","number","id_event");
 
 }
