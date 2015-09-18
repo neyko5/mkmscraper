@@ -41,7 +41,7 @@ class ScrapeGraph extends Command
                             \MkmScraper\GraphPrice::create(array("id_card"=>$card->id,"date"=>date_format(date_create_from_format('d.m.y', $label), 'Y-m-d'),"sell"=>$object->datasets[0]->data[$key]));
                         }
                     }
-                    print $card->name. " - ".(microtime()-$time)." ms </br>";
+                    print $card->name."\n";
                 }
                 catch(Exception $e){
                     print 'https://www.magiccardmarket.eu/Products/Singles/'.rawurlencode($card->set).'/'.rawurlencode($card->name);
