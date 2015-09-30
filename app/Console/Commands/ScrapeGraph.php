@@ -28,7 +28,7 @@ class ScrapeGraph extends Command
     public function handle()
     {
         $client = new \Goutte\Client();
-        foreach(\MkmScraper\Card::orderBy(\DB::raw("random"))->get() as $card){
+        foreach(\MkmScraper\Card::orderBy(\DB::raw("random()"))->get() as $card){
             if(\MkmScraper\GraphPrice::where("id_card",$card->id)->where("created_at",">",date('Y-m-d H:i:s',strtotime('-1 week')))->count()<1){
                 $crawler = $client->request('GET','https://www.magiccardmarket.eu/Products/Singles/'.rawurlencode($card->set).'/'.rawurlencode($card->name));
                 $available=$crawler->filter('#ProductInformation script')->first()->text();
