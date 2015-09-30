@@ -29,7 +29,7 @@ class ScrapeGraph extends Command
     {
         $client = new \Goutte\Client();
         foreach(\MkmScraper\Card::all() as $card){
-            if(\MkmScraper\GraphPrice::where("id_card",$card->id)->where("created_at",">",date('Y-m-s H:i:s',strtotime('-1 week')))->count()<1){
+            if(\MkmScraper\GraphPrice::where("id_card",$card->id)->where("created_at",">",date('Y-m-d H:i:s',strtotime('-1 week')))->count()<1){
                 $crawler = $client->request('GET','https://www.magiccardmarket.eu/Products/Singles/'.rawurlencode($card->set).'/'.rawurlencode($card->name));
                 $available=$crawler->filter('#ProductInformation script')->first()->text();
                 $split=explode("chartData =",$available);
