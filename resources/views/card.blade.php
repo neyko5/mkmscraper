@@ -16,6 +16,7 @@
         @endforeach
     </table>
     <div id="price_plot" style="height: 300px;"> </div>
+    <div id="graph_plot" style="height: 300px;"> </div>
     <script type="text/javascript">
 
         $(function() {
@@ -28,6 +29,18 @@
             }
 
             $.plot("#price_plot", priceData, {
+                xaxis: { mode: "time", timeformat: "%d. %m. %Y" }
+            });
+
+            var graphprices={!!$card->getGraphChart() !!}
+            graphpriceData = [];
+            for (var prop in graphprices) {
+                graphpriceData.push({label: prop, data:$.map(graphprices[prop], function(i,j){
+                    return [[new Date(i[0],i[1]-1,i[2]).getTime(), i[3]]];
+                })});
+            }
+
+            $.plot("#graph_plot", graphpriceData, {
                 xaxis: { mode: "time", timeformat: "%d. %m. %Y" }
             });
 
