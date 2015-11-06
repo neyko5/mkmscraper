@@ -2,7 +2,6 @@
 
 @section('content')
     <h1>Set</h1>
-    <div>Price: {{$set->averageBooster()}}</div>
     <table class="table">
         <thead>
         <th>ID</th>

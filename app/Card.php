@@ -16,7 +16,7 @@ class Card extends Model
     public function prices(){
         return $this->hasMany("\MkmScraper\CardPrice","id_card");
     }
-
+    
     public function todaysPrice(){
         return $this->prices()->where("updated_at","<",date("Y-m-d")." 23:59:59")->where("updated_at",">",date("Y-m-d")." 00:00:00");
     }
@@ -26,50 +26,18 @@ class Card extends Model
     }
 
     public function getChart(){
-
-        $firstPrice=\MkmScraper\CardPrice::orderBy("updated_at","ASC")->first();
-        $objects=array("trend"=>array());
-        for($year=intval(date("Y"));$year>=intval(date("Y",strtotime($firstPrice->updated_at)));$year--){
-            for($month=12;$month>=1;$month--){
-                for($day=31;$day>=1;$day--){
-                    if(($year."-".sprintf('%02d', $month)."-".sprintf('%02d', $month)." 00:00:00")<date("Y-m-d h:i:s")) {
-                        $start = $year . "-" . sprintf('%02d', $month) . "-".sprintf('%02d', $day)." 00:00:00";
-                        $end = $year . "-" . sprintf('%02d', $month) . "-".sprintf('%02d', $day)." 23:59:59";
-
-                        $cardPrice=\MkmScraper\CardPrice::where("id_card",$this->id)->where("updated_at", ">", $start)->where("updated_at", "<", $end)->first();
-                        if($cardPrice){
-                            $objects['trend'][] = array($year, $month,$day,$cardPrice->trend);
-                            //$objects['low'][] = array($year, $month,$day, $cardPrice->low);
-                        }
-
-
-
-                    }
-                }
-            }
+        $objects=array("trend"=>array(),"sell"=>array(),"low"=>array());
+        foreach(\MkmScraper\CardPrice::where("id_card",$this->id)->orderBy("updated_at","ASC")->get() as $price){
+            $date=explode("-",date("Y-m-d",strtotime($price->created_at)));
+            $objects['trend'][] = array($date[0], $date[1],$date[2],$price->trend);
+            $objects['low'][] = array($date[0], $date[1],$date[2],$price->low);
+            $objects['sellers'][] = array($date[0], $date[1],$date[2],$price->sellers);
         }
+        foreach(\MkmScraper\GraphPrice::where("id_card",$this->id)->orderBy("date","ASC")->get() as $price){
+            $date=explode("-",$price->date);
+            $objects['sell'][] = array($date[0], $date[1],$date[2],$price->sell);
+        }
+
         return json_encode($objects);
     }
-
-    public function getGraphChart(){
-
-        $firstPrice=\MkmScraper\GraphPrice::orderBy("date","ASC")->first();
-        $objects=array("sell"=>array());
-        for($year=intval(date("Y"));$year>=intval(date("Y",strtotime($firstPrice->date)));$year--){
-            for($month=12;$month>=1;$month--){
-                for($day=31;$day>=1;$day--){
-                    if(($year."-".sprintf('%02d', $month)."-".sprintf('%02d', $month)." 00:00:00")<date("Y-m-d h:i:s")) {
-                        $start = $year . "-" . sprintf('%02d', $month) . "-".sprintf('%02d', $day);
-                        $cardPrice=\MkmScraper\GraphPrice::where("id_card",$this->id)->where("date", "=", $start)->first();
-                        if($cardPrice){
-                            $objects['sell'][] = array($year, $month,$day,$cardPrice->sell);
-                            //$objects['low'][] = array($year, $month,$day, $cardPrice->low);
-                        }
-                    }
-                }
-            }
-        }
-        return json_encode($objects);
-    }
-
 }

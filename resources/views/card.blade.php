@@ -2,46 +2,47 @@
 
 @section('content')
     <h1>{{$card->name}}</h1>
+    {{print_r($card->stats)}}
     <table class="table">
         <thead>
         <th>ID</th>
+        <th>Date</th>
         <th>Price</th>
         </thead>
         @foreach($card->prices as $price)
             <tr>
-                <td>{{$price->updated_at}}</td>
+                <td>{{$price->id}}</td>
+                <td>{{date("d. m. Y",strtotime($price->updated_at))}}</td>
                 <td>{{$price->trend}}</td>
                 <td>{{$price->sellers}}</td>
             </tr>
         @endforeach
     </table>
     <div id="price_plot" style="height: 300px;"> </div>
-    <div id="graph_plot" style="height: 300px;"> </div>
     <script type="text/javascript">
 
         $(function() {
             var prices={!!$card->getChart() !!}
             priceData = [];
             for (var prop in prices) {
-                priceData.push({label: prop, data:$.map(prices[prop], function(i,j){
+                if(prop=="sellers"){
+                    axis=2;
+                }
+                else{
+                    axis=1;
+                }
+                priceData.push({label: prop,yaxis:axis, data:$.map(prices[prop], function(i,j){
                     return [[new Date(i[0],i[1]-1,i[2]).getTime(), i[3]]];
                 })});
             }
 
             $.plot("#price_plot", priceData, {
-                xaxis: { mode: "time", timeformat: "%d. %m. %Y" }
-            });
-
-            var graphprices={!!$card->getGraphChart() !!}
-            graphpriceData = [];
-            for (var prop in graphprices) {
-                graphpriceData.push({label: prop, data:$.map(graphprices[prop], function(i,j){
-                    return [[new Date(i[0],i[1]-1,i[2]).getTime(), i[3]]];
-                })});
-            }
-
-            $.plot("#graph_plot", graphpriceData, {
-                xaxis: { mode: "time", timeformat: "%d. %m. %Y" }
+                xaxis: { mode: "time", timeformat: "%d. %m. %Y" },
+                yaxes: [ { min: 0 }, {
+                    // align if we are to the right
+                    alignTicksWithAxis:1,
+                    position: "right",
+                } ],
             });
 
         });

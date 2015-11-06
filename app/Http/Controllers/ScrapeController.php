@@ -5,7 +5,7 @@ namespace MkmScraper\Http\Controllers;
 class ScrapeController extends Controller
 {
     public function processWizards(){
-        $event=\MkmScraper\Event::create(array("name"=>\Input::get("name"),"date"=>\Input::get("date"),"rank"=>\Input::get("rank")));
+        $event=\MkmScraper\Event::create(array("name"=>\Input::get("name"),"date"=>\Input::get("date"),"rank"=>\Input::get("rank"),"link"=>\Input::get("url")));
         for($i=1;$i<9;$i++){
             if(\Input::get("url_".$i)){
                 if (($handle = fopen(\Input::get("url_".$i), "r")) !== FALSE) {
@@ -26,7 +26,7 @@ class ScrapeController extends Controller
     public function processScg(){
         $client = new \Goutte\Client();
         $crawler = $client->request('GET',\Input::get("url"));
-        $event=\MkmScraper\Event::create(array("name"=>\Input::get("name"),"date"=>\Input::get("date"),"rank"=>\Input::get("rank")));
+        $event=\MkmScraper\Event::create(array("name"=>\Input::get("name"),"date"=>\Input::get("date"),"rank"=>\Input::get("rank"),"link"=>\Input::get("url")));
         $link=$crawler->filter("td a")->each(function($node) use ($client,$event){
             if(strpos($node->attr('href'),"http://sales.starcitygames.com//deckdatabase/displaydeck.php?DeckID=")!==false){
                 $dlcrawler=$client->request('GET',$node->attr('href'));
@@ -48,7 +48,7 @@ class ScrapeController extends Controller
     public function processTop8(){
         $client = new \Goutte\Client();
         $crawler = $client->request('GET',\Input::get("url"));
-        $event=\MkmScraper\Event::create(array("name"=>\Input::get("name"),"date"=>\Input::get("date"),"rank"=>\Input::get("rank")));
+        $event=\MkmScraper\Event::create(array("name"=>\Input::get("name"),"date"=>\Input::get("date"),"rank"=>\Input::get("rank"),"link"=>\Input::get("url")));
         $i=1;
         $link=$crawler->filter("td>div>div a")->each(function($node) use ($client,$event,&$i){
 

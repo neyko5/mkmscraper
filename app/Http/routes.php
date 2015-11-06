@@ -68,3 +68,9 @@ Route::post("decklists/top8","ScrapeController@processTop8");
 Route::get("/","DisplayController@showSets");
 Route::get("/set/{id}","DisplayController@showSet");
 Route::get("/card/{id}","DisplayController@showCard");
+
+Route::get("/tournaments","EnterController@showTournaments");
+Route::post("/tournament/enter","EnterController@processTournament");
+
+Route::get("/articles","EnterController@showArticles");
+Route::post("/article/enter","EnterController@processArticle");
