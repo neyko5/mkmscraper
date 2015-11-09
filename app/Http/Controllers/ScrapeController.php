@@ -21,6 +21,7 @@ class ScrapeController extends Controller
                 }
             }
         }
+        return redirect("decklists/wizards")->with(array("message"=>"Decklists from tournament <b>".\Input::get("name")."</b> was successfully entered."));
     }
 
     public function processScg(){
@@ -43,6 +44,7 @@ class ScrapeController extends Controller
                 });
             }
         });
+        return redirect("decklists/scg")->with(array("message"=>"Decklists from tournament <b>".\Input::get("name")."</b> was successfully entered."));
     }
 
     public function processTop8(){
@@ -65,5 +67,6 @@ class ScrapeController extends Controller
                 $i=$i+1;
             }
         });
+        return redirect("decklists/top8")->with(array("message"=>"Decklists from tournament <b>".\Input::get("name")."</b> was successfully entered."));
     }
 }

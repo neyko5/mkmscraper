@@ -24,8 +24,6 @@ Route::get("scrape",function(){
             });
         }
     });
-
-
 });
 
 Route::get("htmlscrape",function(){
