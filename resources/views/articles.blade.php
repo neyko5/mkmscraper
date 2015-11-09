@@ -20,7 +20,7 @@
         <label for="date">Publisher</label>
         <select name="publisher"  class="form-control">
             <option value="1">1 - StarCityGames</option>
-            <option value="2">2 - ChannelFireball</option>
+            <option value="2" selected>2 - ChannelFireball</option>
             <option value="3">3 - BlackBorder</option>
             <option value="4">4 - Wizards</option>
             <option value="5">5 - TCG Player</option>

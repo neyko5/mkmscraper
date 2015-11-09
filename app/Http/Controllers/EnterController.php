@@ -28,7 +28,10 @@ class EnterController extends Controller
         }
         if(\Input::get("publisher")=="2"){
             $text=$crawler->filter(".postContent")->text();
-            echo $text;
+            $title=$crawler->filter(".postTitle")->text();
+            $auth=$crawler->filter(".byAuthor")->text();
+            $au=explode("//",$auth);
+            $date=trim(preg_replace('#[^A-Za-z0-9-, /]#', '',$au[1]));
         }
         if(\Input::get("publisher")=="3"){
             $text=$crawler->filter("#blackborder_main_wrapper .content .field-name-body")->text();
