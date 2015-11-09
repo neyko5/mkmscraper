@@ -18,11 +18,13 @@ class EnterController extends Controller
     }
 
     public function processArticle(){
-        $article=\MkmScraper\Article::create(array("title"=>\Input::get("title"),"date"=>\Input::get("date"),"popularity"=>\Input::get("popularity"),"publisher"=>\Input::get("publisher"),"link"=>\Input::get("url")));
+        $article=\MkmScraper\Article::create(array("popularity"=>\Input::get("popularity"),"publisher"=>\Input::get("publisher"),"link"=>\Input::get("url")));
         $client = new \Goutte\Client();
         $crawler = $client->request('GET',\Input::get("url"));
         if(\Input::get("publisher")=="1"){
             $text=$crawler->filter("#article_content")->text();
+            $title=$crawler->filter("#article_title h2")->text();
+            $date=$crawler->filter("#article_date")->text();
         }
         if(\Input::get("publisher")=="2"){
             $text=$crawler->filter(".postContent")->text();
@@ -37,7 +39,9 @@ class EnterController extends Controller
             echo $text;
         }
         $article->text=$text;
+        $article->title=$title;
+        $article->date=date("Y-m-d",strtotime($date));
         $article->save();
-        return redirect("articles")->with(array("message"=>"Article <b>".\Input::get("title")."</b> was successfully entered."));
+        return redirect("articles")->with(array("message"=>"Article <b>".$article->title."</b> was successfully entered."));
     }
 }
