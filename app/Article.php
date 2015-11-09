@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Article extends Model
 {
-    protected $fillable=array("title","date","text","publisher","popularity");
+    protected $fillable=array("title","date","text","publisher","popularity","link");
 
     public function publisher(){
         $array=array("0"=>"None",
