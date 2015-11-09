@@ -10,7 +10,7 @@ class EnterController extends Controller
 
     public function processTournament(){
         \MkmScraper\Tournament::create(array("name"=>\Input::get("name"),"date"=>\Input::get("date"),"rank"=>\Input::get("rank"),"limited"=>\Input::get("limited")?1:0));
-        return redirect("tournaments")->with(array("message"=>"Tournament was successfully entered."));
+        return redirect("tournaments")->with(array("message"=>"Tournament <b>".\Input::get("name")."</b> was successfully entered."));
     }
 
     public function showArticles(){
@@ -38,6 +38,6 @@ class EnterController extends Controller
         }
         $article->text=$text;
         $article->save();
-        return redirect("tournaments")->with(array("message"=>"Article <b>".\Input::get("title")." was successfully entered."));
+        return redirect("articles")->with(array("message"=>"Article <b>".\Input::get("title")."</b> was successfully entered."));
     }
 }
