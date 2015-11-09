@@ -4,21 +4,8 @@
     <h1>Enter Article</h1>
     {!! \Form::open(array("action"=>"EnterController@processArticle","method"=>"POST")) !!}
     <div class="form-group">
-        <label for="name">Title</label>
-        <input type="text" name="title" class="form-control" placeholder="Article title">
-    </div>
-    <div class="form-group">
         <label for="url">URL</label>
         <input type="text" name="url" class="form-control" placeholder="URL">
-    </div>
-    <div class="form-group">
-        <label for="date">Date</label>
-        <input type="text" name="date" class="form-control" placeholder="Publishing date">
-    </div>
-    <div class="checkbox">
-        <label for="limited">
-            <input type="checkbox" name="limited" > Limited
-        </label>
     </div>
     <div class="form-group">
         <label for="date">Rank</label>
