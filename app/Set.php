@@ -14,6 +14,10 @@ class Set extends Model
         return $this->hasMany("\MkmScraper\Card","id_set");
     }
 
+    public function mythics(){
+        return $this->hasMany("\MkmScraper\Card","id_set")->where("rarity","Mythic");
+    }
+
     public function averageBooster(){
         $average=0;
         foreach($this->cards as $card){
@@ -69,5 +73,21 @@ class Set extends Model
             }
         }
         return round($average,4);
+    }
+
+    public function daysFromRelease(){
+        return round((time()-strtotime($this->release))/(24*60*60));
+    }
+
+    public function daysFromRotation(){
+        return round((strtotime($this->rotation)-time())/(24*60*60));
+    }
+
+    public function daysFromReleaseDate($date){
+        return round((strtotime($date)-strtotime($this->release))/(24*60*60));
+    }
+
+    public function daysFromRotationDate($date){
+        return round((strtotime($this->rotation)-strtotime($date))/(24*60*60));
     }
 }

@@ -13,6 +13,7 @@ class Kernel extends ConsoleKernel
         \MkmScraper\Console\Commands\ScrapeHtml::class,
         \MkmScraper\Console\Commands\SaveBoosterAverage::class,
         \MkmScraper\Console\Commands\ScrapeGraph::class,
+        \MkmScraper\Console\Commands\ExportSet::class,
     ];
 
 

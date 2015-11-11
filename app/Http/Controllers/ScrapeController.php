@@ -58,7 +58,7 @@ class ScrapeController extends Controller
                 $dlcrawler=$client->request('GET',$node->attr('href'));
                 $link=$dlcrawler->filter("table table td .chosen_tr,table table td .hover_tr")->each(function($node) use($event,$i){
                     $split=explode(" ",$node->text(), 2);
-                    $card=\MkmScraper\Card::where("name",$split[1])->first();
+                    $card=\MkmScraper\Card::where("name","LIKE",$split[1]."%")->first();
                     if($card){
                         \MkmScraper\DecklistAppearance::create(array("id_card"=>$card->id,"number"=>$split[0],"place"=>$i,"id_event"=>$event->id));
                         //print $card->id." - ".$node->text()."<br/>";
@@ -68,5 +68,28 @@ class ScrapeController extends Controller
             }
         });
         return redirect("decklists/top8")->with(array("message"=>"Decklists from tournament <b>".\Input::get("name")."</b> was successfully entered."));
+    }
+
+    public function processAll(){
+        $client = new \Goutte\Client();
+        foreach(\MkmScraper\Event::all() as $event){
+            $crawler = $client->request('GET',$event->link);
+            $i=1;
+            $link=$crawler->filter("td>div>div a")->each(function($node) use ($client,$event,&$i){
+
+                if(strpos($node->attr('href'),"event")!==false){
+                    $dlcrawler=$client->request('GET',$node->attr('href'));
+                    $link=$dlcrawler->filter("table table td .chosen_tr,table table td .hover_tr")->each(function($node) use($event,$i){
+                        $split=explode(" ",$node->text(), 2);
+                        $card=\MkmScraper\Card::where("name","LIKE",$split[1]."%")->first();
+                        if($card){
+                            \MkmScraper\DecklistAppearance::create(array("id_card"=>$card->id,"number"=>$split[0],"place"=>$i,"id_event"=>$event->id));
+                            //print $card->id." - ".$node->text()."<br/>";
+                        }
+                    });
+                    $i=$i+1;
+                }
+            });
+        }
     }
 }

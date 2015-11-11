@@ -62,13 +62,19 @@ Route::get("decklists/top8",function(){
 });
 
 Route::post("decklists/top8","ScrapeController@processTop8");
+Route::get("decklists/all","ScrapeController@processAll");
 
 Route::get("/","DisplayController@showSets");
 Route::get("/set/{id}","DisplayController@showSet");
 Route::get("/card/{id}","DisplayController@showCard");
+
+Route::get("/export/card/{id}","ExportController@exportCard");
+Route::get("/export/set/{id}","ExportController@exportSet");
+Route::get("/export/all","ExportController@exportAll");
 
 Route::get("/tournaments","EnterController@showTournaments");
 Route::post("/tournament/enter","EnterController@processTournament");
 
 Route::get("/articles","EnterController@showArticles");
 Route::post("/article/enter","EnterController@processArticle");
+Route::get("/articles/all","EnterController@processAllArticles");

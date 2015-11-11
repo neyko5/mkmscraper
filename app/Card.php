@@ -40,4 +40,54 @@ class Card extends Model
 
         return json_encode($objects);
     }
+
+    public function graphPrices(){
+        return $this->hasMany("\MkmScraper\GraphPrice","id_card");
+    }
+
+    public function tournamentPercentage(){
+        $all=\DB::table("decklist_appearances")->join('events', 'events.id', '=', 'decklist_appearances.id_event')->sum(\DB::raw("(5-events.rank)*(9-decklist_appearances.place)"));
+        $card=\DB::table("decklist_appearances")->join('events', 'events.id', '=', 'decklist_appearances.id_event')->where("id_card",$this->id)->sum(\DB::raw("(5-events.rank)*(9-decklist_appearances.place)"));
+        return round(100*$card/$all,3);
+    }
+
+    public function tournamentLastWeek(){
+        $all=\DB::table("decklist_appearances")->join('events', 'events.id', '=', 'decklist_appearances.id_event')->where("events.date","<",date('Y-m-d'))->where("events.date",">=",date('Y-m-d', strtotime('-7 days')))->sum(\DB::raw("(5-events.rank)*(9-decklist_appearances.place)"));
+        $card=\DB::table("decklist_appearances")->join('events', 'events.id', '=', 'decklist_appearances.id_event')->where("id_card",$this->id)->where("events.date","<",date('Y-m-d'))->where("events.date",">=",date('Y-m-d', strtotime('-7 days')))->sum(\DB::raw("(5-events.rank)*(9-decklist_appearances.place)"));
+        return round(100*$card/$all,3);
+    }
+
+    public function tournamentLastTwoWeek(){
+        $all=\DB::table("decklist_appearances")->join('events', 'events.id', '=', 'decklist_appearances.id_event')->where("events.date","<",date('Y-m-d', strtotime('-7 days')))->where("events.date",">=",date('Y-m-d', strtotime('-14 days')))->sum(\DB::raw("(5-events.rank)*(9-decklist_appearances.place)"));
+        $card=\DB::table("decklist_appearances")->join('events', 'events.id', '=', 'decklist_appearances.id_event')->where("id_card",$this->id)->where("events.date","<",date('Y-m-d', strtotime('-7 days')))->where("events.date",">=",date('Y-m-d', strtotime('-14 days')))->sum(\DB::raw("(5-events.rank)*(9-decklist_appearances.place)"));
+        return round(100*$card/$all,3);
+    }
+
+    public function tournamentLastThreeWeek(){
+        $all=\DB::table("decklist_appearances")->join('events', 'events.id', '=', 'decklist_appearances.id_event')->where("events.date","<",date('Y-m-d', strtotime('-14 days')))->where("events.date",">=",date('Y-m-d', strtotime('-21 days')))->sum(\DB::raw("(5-events.rank)*(9-decklist_appearances.place)"));
+        $card=\DB::table("decklist_appearances")->join('events', 'events.id', '=', 'decklist_appearances.id_event')->where("id_card",$this->id)->where("events.date","<",date('Y-m-d', strtotime('-14 days')))->where("events.date",">=",date('Y-m-d', strtotime('-21 days')))->sum(\DB::raw("(5-events.rank)*(9-decklist_appearances.place)"));
+        return round(100*$card/$all,3);
+    }
+
+    public function articles(){
+        $result=\DB::table("articles")->where("text","LIKE","%".$this->name."%")->sum(\DB::raw("(5-articles.popularity)"));
+        return $result;
+    }
+
+    public function articlesLastWeek(){
+        $result=\DB::table("articles")->where("text","LIKE","%".$this->name."%")->where("articles.date","<",date('Y-m-d'))->where("articles.date",">=",date('Y-m-d', strtotime('-7 days')))->sum(\DB::raw("(5-articles.popularity)"));
+        return $result;
+    }
+
+    public function articlesLastTwoWeek(){
+        $result=\DB::table("articles")->where("text","LIKE","%".$this->name."%")->where("articles.date","<",date('Y-m-d', strtotime('-7 days')))->where("articles.date",">=",date('Y-m-d', strtotime('-14 days')))->sum(\DB::raw("(5-articles.popularity)"));
+        return $result;
+    }
+
+    public function articlesLastThreeWeek(){
+        $result=\DB::table("articles")->where("text","LIKE","%".$this->name."%")->where("articles.date","<",date('Y-m-d', strtotime('-14 days')))->where("articles.date",">=",date('Y-m-d', strtotime('-21 days')))->sum(\DB::raw("(5-articles.popularity)"));
+        return $result;
+    }
+
+
 }

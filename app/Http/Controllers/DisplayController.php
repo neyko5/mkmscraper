@@ -10,7 +10,7 @@ class DisplayController extends Controller{
 
     public function showSet($id){
         $data['set']=\MkmScraper\Set::find($id);
-        $data['cards']=\MkmScraper\Card::where("id_set",$id)->get();
+        $data['cards']=\MkmScraper\Card::where("id_set",$id)->where("rarity","Mythic")->get();
         return view("set",$data);
     }
 

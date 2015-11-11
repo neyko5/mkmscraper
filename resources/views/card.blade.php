@@ -2,19 +2,39 @@
 
 @section('content')
     <h1>{{$card->name}}</h1>
-    {{print_r($card->stats)}}
     <table class="table">
         <thead>
         <th>ID</th>
+        <th>Sell</th>
         <th>Date</th>
-        <th>Price</th>
+        <th>Percentage</th>
+        <th>Last Week</th>
+        <th>Last Two Week</th>
+        <th>Last Three Week</th>
+        <th>Article Percentage</th>
+        <th>Article Last Week</th>
+        <th>Article Last Two Week</th>
+        <th>Article Last Three Week</th>
+        <th>Change set 1 day</th>
+        <th>Change set 1 week</th>
+        <th>Boosters open</th>
         </thead>
-        @foreach($card->prices as $price)
+        @foreach($card->graphPrices as $price)
             <tr>
                 <td>{{$price->id}}</td>
-                <td>{{date("d. m. Y",strtotime($price->updated_at))}}</td>
-                <td>{{$price->trend}}</td>
-                <td>{{$price->sellers}}</td>
+                <td>{{$price->sell}}</td>
+                <td>{{$price->date}}</td>
+                <td>{{$price->tournamentPercentage()}}</td>
+                <td>{{$price->tournamentLastWeek()}}</td>
+                <td>{{$price->tournamentLastTwoWeek()}}</td>
+                <td>{{$price->tournamentLastThreeWeek()}}</td>
+                <td>{{$price->articles()}}</td>
+                <td>{{$price->articlesLastWeek()}}</td>
+                <td>{{$price->articlesLastTwoWeek()}}</td>
+                <td>{{$price->articlesLastThreeWeek()}}</td>
+                <td>{{$price->otherCardMovementDay()}}</td>
+                <td>{{$price->otherCardMovementWeek()}}</td>
+                <td>{{$price->boostersOpen()}}</td>
             </tr>
         @endforeach
     </table>

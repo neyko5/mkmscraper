@@ -47,4 +47,37 @@ class EnterController extends Controller
         $article->save();
         return redirect("articles")->with(array("message"=>"Article <b>".$article->title."</b> was successfully entered."));
     }
+
+    public function processAllArticles(){
+        foreach(\MkmScraper\Article::all() as $article){
+            $client = new \Goutte\Client();
+            $crawler = $client->request('GET',$article->link);
+            if($article->publisher=="1"){
+                $text=$crawler->filter("#article_content")->text();
+                $title=$crawler->filter("#article_title h2")->text();
+                $date=$crawler->filter("#article_date")->text();
+            }
+            if($article->publisher=="2"){
+                $text=$crawler->filter(".postContent")->text();
+                $title=$crawler->filter(".postTitle")->text();
+                $auth=$crawler->filter(".byAuthor")->text();
+                $au=explode("//",$auth);
+                $date=trim(preg_replace('#[^A-Za-z0-9-, /]#', '',$au[1]));
+            }
+            if($article->publisher=="3"){
+                $text=$crawler->filter("#blackborder_main_wrapper .content .field-name-body")->text();
+                echo $text;
+            }
+            if($article->publisher=="4"){
+                $text=$crawler->filter(".articleBody")->text();
+                echo $text;
+            }
+            $article->text=$text;
+            $article->title=$title;
+            $article->date=date("Y-m-d",strtotime($date));
+            $article->save();
+        }
+
+
+    }
 }
