@@ -56,7 +56,7 @@ class ExportSet extends Command
             $text.="\n";
         }
         file_put_contents ($filename , $text);
-        return \Response::download($filename, $this->argument('set').'set.arff', array('Content-Type' => 'text/aarf'));
+        return \Response::download($this->argument('set').'set.arff', $this->argument('set').'set.arff', array('Content-Type' => 'text/aarf'));
     }
 }
 

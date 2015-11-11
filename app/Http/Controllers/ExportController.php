@@ -48,7 +48,7 @@ class ExportController extends Controller
                 $row = array();
                 $row[] = $price->priceClass();
                 $row[] = 1/pow(pow(2.71828,$price->card->set->daysFromReleaseDate($price->date)),0.2);
-                $row[] = 1/pow(pow($price->card->set->daysFromRotationDate($price->date)),0.2);
+                $row[] = 1/pow(pow(2.71828,$price->card->set->daysFromRotationDate($price->date)),0.2);
                 $row[] = $price->tournamentDiffWeek();
                 $row[] = $price->tournamentDiffTwoWeek();
                 $row[] = $price->articlesDiffLastWeek();
