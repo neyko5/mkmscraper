@@ -47,8 +47,8 @@ class ExportController extends Controller
             foreach ($card->graphPrices as $key => $price) {
                 $row = array();
                 $row[] = $price->priceClass();
-                $row[] = 1/pow(pow(2.71828,$price->card->set->daysFromReleaseDate($price->date)),0.2);
-                $row[] = 1/pow(pow(2.71828,$price->card->set->daysFromRotationDate($price->date)),0.2);
+                $row[] = $price->card->set->daysFromReleaseDate($price->date);
+                $row[] = $price->card->set->daysFromRotationDate($price->date);
                 $row[] = $price->tournamentDiffWeek();
                 $row[] = $price->tournamentDiffTwoWeek();
                 $row[] = $price->articlesDiffLastWeek();
@@ -79,8 +79,8 @@ class ExportController extends Controller
             foreach ($card->graphPrices as $key => $price) {
                 $row = array();
                 $row[] = $price->priceClass();
-                $row[] = 1/pow(pow(2.71828,$price->card->set->daysFromReleaseDate($price->date)),0.2);
-                $row[] = 1/pow(pow(2.71828,$price->card->set->daysFromRotationDate($price->date)),0.2);
+                $row[] = $price->card->set->daysFromReleaseDate($price->date);
+                $row[] = $price->card->set->daysFromRotationDate($price->date);
                 $row[] = $price->tournamentDiffWeek();
                 $row[] = $price->tournamentDiffTwoWeek();
                 $row[] = $price->articlesDiffLastWeek();
