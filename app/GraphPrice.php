@@ -13,13 +13,18 @@ class GraphPrice extends Model
     }
 
     public function priceDiff(){
-        $lastDay=\DB::table("graph_prices")->where("id_card",$this->id_card)->where("date","=",date('Y-m-d', strtotime($this->date)-24*60*60))->select('sell');
-        return $this->sell-$lastDay->sell;
+        $lastDay=\DB::table("graph_prices")->where("id_card",$this->id_card)->where("date","=",date('Y-m-d', strtotime($this->date)-24*60*60))->select('sell')->first();
+        if($lastDay){
+            return $this->sell-$lastDay->sell;
+        }
+        else{
+            return -1;
+        }
     }
 
     public function priceClass(){
-        $lastDay=\DB::table("graph_prices")->where("id_card",$this->id_card)->where("date","=",date('Y-m-d', strtotime($this->date)-24*60*60))->select('sell')->first();
-        if($lastDay && ($this->sell-$lastDay->sell)>=0){
+        $lastDay=\DB::table("graph_prices")->where("id_card",$this->id_card)->where("date","=",date('Y-m-d', strtotime($this->date)-7*24*60*60))->select('sell')->first();
+        if($lastDay &&  ($this->sell-$lastDay->sell)>=0){
             return 1;
         }
         else{
@@ -40,8 +45,8 @@ class GraphPrice extends Model
     }
 
     public function tournamentLastWeek(){
-        $all=\DB::table("decklist_appearances")->join('events', 'events.id', '=', 'decklist_appearances.id_event')->where("events.date","<",$this->date)->where("events.date",">=",date('Y-m-d', strtotime($this->date)-7*24*60*60))->sum(\DB::raw("(5-events.rank)*(9-decklist_appearances.place)"));
-        $card=\DB::table("decklist_appearances")->join('events', 'events.id', '=', 'decklist_appearances.id_event')->where("id_card",$this->id_card)->where("events.date","<",date('Y-m-d'))->where("events.date",">=",date('Y-m-d', strtotime($this->date)-7*24*60*60))->sum(\DB::raw("(5-events.rank)*(9-decklist_appearances.place)"));
+        $all=\DB::table("decklist_appearances")->join('events', 'events.id', '=', 'decklist_appearances.id_event')->where("events.date","<",date('Y-m-d', strtotime($this->date)))->where("events.date",">=",date('Y-m-d', strtotime($this->date)-7*24*60*60))->sum(\DB::raw("(5-events.rank)*(9-decklist_appearances.place)"));
+        $card=\DB::table("decklist_appearances")->join('events', 'events.id', '=', 'decklist_appearances.id_event')->where("id_card",$this->id_card)->where("events.date","<",date('Y-m-d', strtotime($this->date)))->where("events.date",">=",date('Y-m-d', strtotime($this->date)-7*24*60*60))->sum(\DB::raw("(5-events.rank)*(9-decklist_appearances.place)"));
         if($all>0){
             return round(100*$card/$all,3);
         }

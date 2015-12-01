@@ -41,6 +41,18 @@ class Card extends Model
         return json_encode($objects);
     }
 
+    public function getMovement(){
+        foreach(\MkmScraper\CardPrice::where("id_card",$this->id)->orderBy("updated_at","ASC")->get() as $price){
+            $date=explode("-",date("Y-m-d",strtotime($price->created_at)));
+            $objects['low'][] = array($date[0], $date[1],$date[2],$price->priceDiff());
+        }
+        foreach(\MkmScraper\GraphPrice::where("id_card",$this->id)->orderBy("date","ASC")->get() as $price){
+            $date=explode("-",$price->date);
+            $objects['art'][] = array($date[0], $date[1],$date[2],$price->tournamentDiffWeek());
+        }
+        return json_encode($objects);
+    }
+
     public function graphPrices(){
         return $this->hasMany("\MkmScraper\GraphPrice","id_card");
     }

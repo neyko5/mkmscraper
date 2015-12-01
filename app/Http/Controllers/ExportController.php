@@ -47,15 +47,8 @@ class ExportController extends Controller
             foreach ($card->graphPrices as $key => $price) {
                 $row = array();
                 $row[] = $price->priceClass();
-                $row[] = $price->card->set->daysFromReleaseDate($price->date);
-                $row[] = $price->card->set->daysFromRotationDate($price->date);
                 $row[] = $price->tournamentDiffWeek();
-                $row[] = $price->tournamentDiffTwoWeek();
                 $row[] = $price->articlesDiffLastWeek();
-                $row[] = $price->articlesDiffLastTwoWeek();
-                $row[] = $price->otherCardMovementDay();
-                $row[] = $price->otherCardMovementWeek();
-                $row[] = $price->boostersOpen();
                 $array[] = $row;
             }
         }
