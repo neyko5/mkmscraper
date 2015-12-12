@@ -6,3 +6,5 @@
 <script src="/plugins/flot/jquery.flot.min.js"></script>
 <script src="/plugins/flot/jquery.flot.categories.min.js" type="text/javascript"></script>
 <script src="/plugins/flot/jquery.flot.time.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.10/css/jquery.dataTables.min.css">
+<script src="//cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js" type="text/javascript"></script>

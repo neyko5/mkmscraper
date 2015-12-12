@@ -69,8 +69,12 @@ Route::get("/set/{id}","DisplayController@showSet");
 Route::get("/card/{id}","DisplayController@showCard");
 
 Route::get("/export/card/{id}","ExportController@exportCard");
+Route::get("/export/cardnew/{id}","ExportController@exportCardNew");
 Route::get("/export/set/{id}","ExportController@exportSet");
+Route::get("/export/setnew/{id}","ExportController@exportSetNew");
+Route::get("/export/setnewcsv/{id}","ExportController@exportSetNewCsv");
 Route::get("/export/all","ExportController@exportAll");
+Route::get("/export/allnew","ExportController@exportAllNew");
 
 Route::get("/tournaments","EnterController@showTournaments");
 Route::post("/tournament/enter","EnterController@processTournament");
@@ -78,3 +82,5 @@ Route::post("/tournament/enter","EnterController@processTournament");
 Route::get("/articles","EnterController@showArticles");
 Route::post("/article/enter","EnterController@processArticle");
 Route::get("/articles/all","EnterController@processAllArticles");
+
+Route::get("/events","EventController@index");

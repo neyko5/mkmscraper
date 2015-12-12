@@ -131,5 +131,40 @@ class GraphPrice extends Model
         return $result;
     }
 
+    public static function getPriceDiffWeek($date,$card){
+        $resultThis=\DB::table("graph_prices")->where("id_card",$card->id)->where("graph_prices.date","<",$date)->where("graph_prices.date",">=",date('Y-m-d', strtotime($date)-7*24*60*60))->avg("sell");
+        $resultLast=\DB::table("graph_prices")->where("id_card",$card->id)->where("graph_prices.date","<",date('Y-m-d', strtotime($date)-7*24*60*60))->where("graph_prices.date",">=",date('Y-m-d', strtotime($date)-14*24*60*60))->avg("sell");
+        return $resultThis-$resultLast;
+    }
+
+    public static function getPriceDiffWeekBoolean($date,$card){
+        return \Mkmscraper\GraphPrice::getPriceDiffWeek($date,$card)>0?"A":"B";
+    }
+
+    public static function getPriceWeek($date,$card){
+        $resultThis=\DB::table("graph_prices")->where("id_card",$card->id)->where("graph_prices.date","<",$date)->where("graph_prices.date",">=",date('Y-m-d', strtotime($date)-7*24*60*60))->avg("sell");
+        return $resultThis;
+    }
+
+    public static function getPriceSingleWeek($date,$card){
+        $resultThis=\DB::table("graph_prices")->where("id_card",$card->id)->where("graph_prices.date","=",$date)->avg("sell");
+        $resultThen=\DB::table("graph_prices")->where("id_card",$card->id)->where("graph_prices.date","=",date('Y-m-d', strtotime($date)-7*24*60*60))->avg("sell");
+        return $resultThis-$resultThen;
+    }
+    public static function getPriceSingleWeekHalf($date,$card){
+        $resultThis=\DB::table("graph_prices")->where("id_card",$card->id)->where("graph_prices.date","<=",$date)->where("graph_prices.date",">",date('Y-m-d', strtotime($date)-1*24*60*60))->avg("sell");
+        $resultThen=\DB::table("graph_prices")->where("id_card",$card->id)->where("graph_prices.date","<=",date('Y-m-d', strtotime($date)-6*24*60*60))->where("graph_prices.date",">",date('Y-m-d', strtotime($date)-7*24*60*60))->avg("sell");
+        return $resultThis-$resultThen;
+    }
+
+    public static function getPriceOtherSingleWeek($date,$card){
+        $resultThis=\DB::table("graph_prices")->join('cards','cards.id',"=","graph_prices.id_card")->where("cards.id_set","=",$card->id_set)->where("id_card","<>",$card->id)->where("graph_prices.date","=",$date)->avg("sell");
+        $resultThen=\DB::table("graph_prices")->join('cards','cards.id',"=","graph_prices.id_card")->where("cards.id_set","=",$card->id_set)->where("id_card","<>",$card->id)->where("graph_prices.date","=",date('Y-m-d', strtotime($date)-7*24*60*60))->avg("sell");
+        return $resultThis-$resultThen;
+    }
+
+    public static function getPriceSingleWeekBoolean($date,$card){
+        return GraphPrice::getPriceSingleWeek($date,$card)>0?"1":"-1";
+    }
 
 }
