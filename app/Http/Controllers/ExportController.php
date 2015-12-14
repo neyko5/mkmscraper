@@ -40,24 +40,29 @@ class ExportController extends Controller
         $filename = "export.arff";
         $handle = fopen($filename, 'w+');
 
-        $text="@relation 'price'\n@attribute y {-1,1}\n@attribute x0 numeric\n@attribute x1 numeric\n@attribute x2 numeric\n@attribute x3 numeric\n@data\n\n";
+        $text="@relation 'price'\n@attribute y {-1,1}\n@attribute x0 numeric\n@attribute x1 numeric\n@attribute x2 numeric\n@attribute x3 numeric\n@attribute x4 numeric\n@attribute x5 numeric\n@attribute x6 numeric\n@attribute x7 numeric\n@attribute x8 numeric\n@attribute x9 numeric\n@data\n\n";
 
         $array=array(array());
         $card=\MkmScraper\Card::find($id);
         $date="2015-09-03";
         while($date<"2015-12-10"){
             $row = array();
-
             $row[]=\MkmScraper\GraphPrice::getPriceSingleWeekBoolean($date,$card);
-            $row[]=\MkmScraper\DecklistAppearance::tournamentDiffLastWeek(date("Y-m-d",strtotime($date)-14*24*60*60),$card);
+            $row[]=\MkmScraper\DecklistAppearance::tournamentDiffLastWeek(date("Y-m-d",strtotime($date)-0*24*60*60),$card);
+            $row[]=\MkmScraper\DecklistAppearance::tournamentDiffLastWeek(date("Y-m-d",strtotime($date)-7*24*60*60),$card);
+            $row[]=\MkmScraper\Article::getDiffWeek(date("Y-m-d",strtotime($date)-0*24*60*60),$card);
             $row[]=\MkmScraper\Article::getDiffWeek(date("Y-m-d",strtotime($date)-7*24*60*60),$card);
-            $row[]=\MkmScraper\GraphPrice::getPriceOtherSingleWeek(date("Y-m-d",strtotime($date)-7*24*60*60),$card);
+            $row[]=\MkmScraper\Article::getArticlesWeek(date("Y-m-d",strtotime($date)-0*24*60*60),$card);
+            $row[]=\MkmScraper\Article::getDiffWeek(date("Y-m-d",strtotime($date)+7*24*60*60),$card);
+            $row[]=\MkmScraper\GraphPrice::pptqSeason($date);
             $row[]=$card->distanceFromRotationExp($date);
-            //$row[]=$card->daysFromRelease($date);
-
+            $row[]=$card->daysFromRelease($date);
+            $row[]=\MkmScraper\GraphPrice::getPriceOtherSingleWeek(date("Y-m-d",strtotime($date)-0*24*60*60),$card);
+            $row[]=\MkmScraper\GraphPrice::tournamentsNextWeekend($date);
+            $row[]=\MkmScraper\GraphPrice::boostersOpen($date);
             $array[] = $row;
 
-            $date=date("Y-m-d",strtotime($date)+7*24*60*60);
+            $date=date("Y-m-d",strtotime($date)+1*24*60*60);
         }
         foreach($array as $row){
             foreach($row as $item){

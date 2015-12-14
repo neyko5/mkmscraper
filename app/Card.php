@@ -48,15 +48,15 @@ class Card extends Model
             $dateexp=explode("-",$date);
             //$objects['sell'][]=array($dateexp[0], $dateexp[1],$dateexp[2],\MkmScraper\CardPrice::getPriceSingleWeek($date,$this));
             //$objects['sell'][]=array($dateexp[0], $dateexp[1],$dateexp[2],\MkmScraper\GraphPrice::getPriceWeek($date,$this));
-            $objects['art'][]=array($dateexp[0], $dateexp[1],$dateexp[2],\MkmScraper\Article::getArticlesWeek(date("Y-m-d",strtotime($date)+7*24*60*60),$this));
+            //$objects['art'][]=array($dateexp[0], $dateexp[1],$dateexp[2],\MkmScraper\Article::getArticlesWeek(date("Y-m-d",strtotime($date)+7*24*60*60),$this));
             //$objects['art'][]=array($dateexp[0], $dateexp[1],$dateexp[2],\MkmScraper\Article::getArticlesWeek(date("Y-m-d",strtotime($date)-0*24*60*60),$this)*\MkmScraper\Article::getDiffWeek(date("Y-m-d",strtotime($date)-0*24*60*60),$this));
             //$objects['art'][]=array($dateexp[0], $dateexp[1],$dateexp[2],\MkmScraper\Article::getArticlesWeek(date("Y-m-d",strtotime($date)+7*24*60*60),$this));
             //$objects['items'][]=array($dateexp[0], $dateexp[1],$dateexp[2],\MkmScraper\CardPrice::getItemsSingleWeek(date("Y-m-d",strtotime($date)+14*24*60*60),$this));
             //$objects['art'][]=array($dateexp[0], $dateexp[1],$dateexp[2],\MkmScraper\Article::getArticlesTwoWeek($date,$this));
             //$objects['sell'][]=array($dateexp[0], $dateexp[1],$dateexp[2],\MkmScraper\GraphPrice::getPriceDiffWeek($date,$this));
             //$objects['sell'][]=array($dateexp[0], $dateexp[1],$dateexp[2],\MkmScraper\GraphPrice::getPriceSingleWeekBoolean($date,$this));
-            //$objects['sell2'][]=array($dateexp[0], $dateexp[1],$dateexp[2],\MkmScraper\GraphPrice::getPriceSingleWeek($date,$this));
-            $objects['sell1'][]=array($dateexp[0], $dateexp[1],$dateexp[2],\MkmScraper\GraphPrice::getPriceSingleWeekHalf($date,$this));
+            $objects['sell'][]=array($dateexp[0], $dateexp[1],$dateexp[2],\MkmScraper\GraphPrice::getPriceSingleWeek($date,$this));
+            //$objects['sell'][]=array($dateexp[0], $dateexp[1],$dateexp[2],\MkmScraper\GraphPrice::getPriceSingleWeekHalf($date,$this));
             //$objects['oth'][]=array($dateexp[0], $dateexp[1],$dateexp[2],-\MkmScraper\GraphPrice::getPriceOtherSingleWeek(date("Y-m-d",strtotime($date)-7*24*60*60),$this));
             //$objects['sell'][]=array($dateexp[0], $dateexp[1],$dateexp[2],\MkmScraper\CardPrice::getPriceDiffWeek($date,$this));
             //$objects['art'][]=array($dateexp[0], $dateexp[1],$dateexp[2],\MkmScraper\Article::getDiffWeek(date("Y-m-d",strtotime($date)-1*24*60*60),$this)*1+\MkmScraper\Article::getDiffWeek(date("Y-m-d",strtotime($date)-7*24*60*60),$this)*3+\MkmScraper\Article::getDiffWeek(date("Y-m-d",strtotime($date)-14*24*60*60),$this)*1);
@@ -66,7 +66,7 @@ class Card extends Model
             //$objects['art'][]=array($dateexp[0], $dateexp[1],$dateexp[2],\MkmScraper\Article::getDiffWeekBoolean(date("Y-m-d",strtotime($date)-7*24*60*60),$this));
             //$objects['art'][]=array($dateexp[0], $dateexp[1],$dateexp[2],\MkmScraper\Article::getDiffTwoWeek($date,$this));
             //$objects['touryes'][]=array($dateexp[0], $dateexp[1],$dateexp[2],\MkmScraper\DecklistAppearance::tournamentLastWeek(date("Y-m-d",strtotime($date)+7*24*60*60),$this));
-            //$objects['tour'][]=array($dateexp[0], $dateexp[1],$dateexp[2],\MkmScraper\DecklistAppearance::tournamentDiffLastWeek(date("Y-m-d",strtotime($date)-14*24*60*60),$this));
+            $objects['tour'][]=array($dateexp[0], $dateexp[1],$dateexp[2],\MkmScraper\DecklistAppearance::tournamentDiffLastWeek(date("Y-m-d",strtotime($date)+14*24*60*60),$this));
             //$objects['tour2'][]=array($dateexp[0], $dateexp[1],$dateexp[2],\MkmScraper\DecklistAppearance::tournamentDiffLastWeek(date("Y-m-d",strtotime($date)-7*24*60*60),$this));
             //$objects['tour3'][]=array($dateexp[0], $dateexp[1],$dateexp[2],\MkmScraper\DecklistAppearance::tournamentDiffLastWeek(date("Y-m-d",strtotime($date)-14*24*60*60),$this));
             //$objects['tour3'][]=array($dateexp[0], $dateexp[1],$dateexp[2],\MkmScraper\DecklistAppearance::tournamentDiffLastWeek(date("Y-m-d",strtotime($date)+0*24*60*60),$this));

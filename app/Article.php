@@ -21,7 +21,7 @@ class Article extends Model
     public static function getDiffWeek($date,$card){
         $resultThis=\DB::table("articles")->where("text","LIKE","%".$card->name."%")->where("articles.date","<",$date)->where("articles.date",">=",date('Y-m-d', strtotime($date)-4*24*60*60))->count();
         $resultLast=\DB::table("articles")->where("text","LIKE","%".$card->name."%")->where("articles.date","<",date('Y-m-d', strtotime($date)-4*24*60*60))->where("articles.date",">=",date('Y-m-d', strtotime($date)-7*24*60*60))->count();
-        if($resultThis>0){
+        if($resultLast>0){
             return ($resultThis-$resultLast)/$resultLast;
         }
         else {

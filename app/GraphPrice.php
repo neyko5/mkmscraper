@@ -126,8 +126,18 @@ class GraphPrice extends Model
 
         return $yesterday-$twodaysago;
     }
-    public function boostersOpen(){
-        $result=\DB::table("limited_seasons")->where("limited_seasons.start",">=",$this->date)->where("limited_seasons.end","<=",$this->date)->sum("number");
+    public static function boostersOpen($date){
+        $result=\DB::table("limited_seasons")->where("limited_seasons.start",">=",$date)->where("limited_seasons.end","<=",$date)->sum("number");
+        return $result;
+    }
+
+    public static function pptqSeason($date){
+        $result=\DB::table("pptq_seasons")->where("pptq_seasons.start",">=",$date)->where("pptq_seasons.end","<=",$date)->count("id");
+        return $result;
+    }
+
+    public static function tournamentsNextWeekend($date){
+        $result=\DB::table("events")->where("events.date",">=",$date)->where("events.date","<=",date('Y-m-d', strtotime($date)+7*24*60*60))->sum("rank");
         return $result;
     }
 
